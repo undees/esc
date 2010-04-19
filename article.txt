@@ -1,0 +1,94 @@
+Testing Embedded GUIs
+=====================
+
+This is an introductory talk--has to be. Embedded devices are so
+different from one another.
+
+Desktop testing is fairly routine. Capture/playback, GUI spidering, or
+just scripted. (Academia hints at more scalable testing.) Basic idea:
+drive the GUI, check the response. Combat fragility by keeping the
+top-level tests in the language of the problem domain--which also
+helps with readability.
+
+
+Case Studies
+------------
+
+Embedded Desktop GUI
+~~~~~~~~~~~~~~~~~~~~
+
+Desktop GUI embedded in instrument. UIAutomation. Project White.
+
+
+Touch-Screen GUI
+~~~~~~~~~~~~~~~~
+
+Show the basics of how Cucmber works. Explain Win32 API connection.
+
+[quote, Bryan O'Sullivan, blog comment (2009)]
+____________________________________________________________________
+Oh wow. I never knew that Rubyists had a Cobol fetish.
+____________________________________________________________________
+
+
+Physical UI
+~~~~~~~~~~~
+
+Remote commands to simulate button pushes.
+
+What to do in embedded GUIs? Developer hooks! Show TCP-driven GUI
+example, which just happens to be reusable as a test for the official
+PI. All but the most restrictive environments support some kind of PI.
+
+
+Experiment
+----------
+
+How low can it scale? With the official wire protocol, you can drive
+anything with TCP. Or you can use whatever homebrewed protocol your
+device supports, and write the glue code yourself. Demo with something
+really cheesy built on an Arduino:
+
+--------------------------------------------------------------------
+  Given I am ambivalent
+  When my mood improves
+  Then I am happy
+--------------------------------------------------------------------
+
+5 LEDs representing moods, up/down buttons. Simulate by sending +/- to
+serial port. Query LED state as bit mask by sending ? character. Get
+good correspondence between GUI / serial, then test largely w/o
+hardware.
+
+Another example: use multiline strings to represent menu text on the
+four-line display of an LCD---that's what I wish I'd done way back
+when. Similar examples: lawn sprinkler controllers, home automation,
+etc.
+
+Now we've run the gamut from ``desktop OS shoehorned into instrument,''
+through ``program running on embedded OS'' to ``barely anything running
+at all.'' Surely your project fits somewhere on this spectrum. Well,
+except that there's some kind of vertical axis. Avionics projects have
+their own stringent model-checking requirements, for instance.
+
+
+Polyglot Testing
+----------------
+
+Just for fun, a low-end ``Cucumber lite'' in Tcl. But there's really no
+need. Cucumber can drive Tcl directly.
+
+Thoughts
+--------
+
+Hooks are the single place where a little developer time has a huge
+impact. I wasn't sure enough of myself to pester people to add this
+stuff at first.
+
+Decide what you want from your tests. Exercise the GUI? Top-to-bottom
+testing? Document the requirements?
+
+Choose a notation that lets you express your intent clearly.
+
+Think of BDD as a rallying cry or an inspirational card on your desk,
+not as a checklist of practices.
