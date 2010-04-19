@@ -1,0 +1,6 @@
+\.DS_Store$
+^docbook/
+^embedgui\.xml$
+^embedgui\.fo$
+^fop\.cfg$
+^embedgui\.pdf$
