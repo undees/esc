@@ -50,9 +50,18 @@ device supports, and write the glue code yourself. Demo with something
 really cheesy built on an Arduino:
 
 --------------------------------------------------------------------
-  Given I am ambivalent
-  When my mood improves
-  Then I am happy
+Given I am ambivalent
+When my mood improves
+Then I am happy
+--------------------------------------------------------------------
+
+An example step definition:
+
+[source,ruby]
+--------------------------------------------------------------------
+When /^my mood improves$/ do
+  @dut.increase_happiness
+end
 --------------------------------------------------------------------
 
 5 LEDs representing moods, up/down buttons. Simulate by sending +/- to
