@@ -106,9 +106,83 @@ class ExampleProject
 }
 --------------------------------------------------------------------
 
-TODO: Wrap this in step defs
+We've seen what the top-level Cucumber test script looks like, and
+what low-level C# code to write to manipulate the on-screen controls.
+But how do we connect the two together?  With C# attributes.  We put
+each test step in its own method, and decorate that with the name of
+the step.  The names are regular expressions, so we don't have to
+write separate steps for things like +the amplitude should be 100+ or
++the amplitude should be 200+.
 
-TODO: Run it from Cucumber
+Here's the code from above, adapted into a C# class with the correct
+attributes:
+
+[source,C#]
+--------------------------------------------------------------------
+class WaveformSteps
+{
+    private Application app;
+    private Window win;
+
+    [Given("^a waveform$")]
+    public void AWaveform()
+    {
+        app = Application.Attach("waveform.exe");
+        win = app.GetWindows().First;
+    }
+
+    [When("^I set the Waveform Type to \"([^\"]*)\"$"]
+    public void ISetTheWaveformTypeTo(string value)
+    {
+        var waveformType =
+            win.Get<ComboBox>(
+                SearchCriteria.ByAutomationId("WaveformType"));
+
+        waveformType.Select(value);
+    }
+
+    [Then("^the Duty Cycle setting should be (.+)$")]
+    public void TheDutyCycleSettingShouldBe(string value)
+    {
+        var wantEnabled = (value == "enabled");
+
+        var isEnabled =
+            win.Get<TextBox>(
+                SearchCriteria.ByAutomationId("DutyCycle")).Enabled;
+
+        if (isEnabled != wantEnabled)
+        {
+            throw new Exception(
+                "Expected the Duty Cycle setting to be " + value);
+        }
+    }
+}
+--------------------------------------------------------------------
+
+When you run a Cucumber test script, Cucumber searches your project's
++features/step_definitions+ directory for the source code to your step
+definitions.  This is fine when you're writing your steps in an
+interpreted language like Python or JavaScript, but what do we do for
+a compiled language like C#?
+
+The answer is that we put a special file called +cucumber.wire+ in the
++step_definitions+ directory, indicating that Cucumber should connect
+to compiled code over a TCP port, rather than interpreting source code
+directly:
+
+--------------------------------------------------------------------
+host: localhost
+port: 3901
+--------------------------------------------------------------------
+
+The Cuke4Nuke project takes care of launching a server with your
+compiled C# step definitions, listening for the names of individual
+Cucumber steps to run, running them, and reporting the pass / fail
+result:
+
+--------------------------------------------------------------------
+C:\MyProject\> cuke4Nuke WaveformSteps.dll
+--------------------------------------------------------------------
 
 Putting the test code directly on the hardware being tested has a few
 drawbacks:
@@ -120,10 +194,33 @@ drawbacks:
 
 Granted, some of these inconveniences could be overcome with a little
 automation.  Even so, if we want to spend our time as developers,
-rather than system administrators, it's useful to keep the frequency
-of interaction with our devices at a minimum.
+rather than system administrators, it's useful to keep interaction
+with our devices at a minimum.
 
-TODO: Explain cucumber.wire
+Fortunately, as you may have guessed from seeing the contents of the
++cucumber.wire+ file, you're free to specify a server running on a
+different machine.
+
+--------------------------------------------------------------------
+host: mytesthardware.example.com
+port: 3901
+--------------------------------------------------------------------
+
+Now, you can copy your step definition DLL down to the hardware and
+run the server there.  Rather than using the +cuke4nuke.bat+ wrapper
+script (which also runs the tests), you'll want to run the server
++.exe+ directly:
+
+--------------------------------------------------------------------
+C:\MyHardware\> Cuke4Nuke.Server.exe WaveformSteps.dll
+--------------------------------------------------------------------
+
+On your PC, you then use just the regular +cucumber+ batch file to run
+the tests:
+
+--------------------------------------------------------------------
+C:\MyProject\> cucumber
+--------------------------------------------------------------------
 
 TODO: Show how to put the step defs on the hardware
 
