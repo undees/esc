@@ -10,6 +10,17 @@ idea: drive the GUI, check the response.  Combat fragility by keeping
 the top-level tests in the language of the problem domain--which also
 helps with readability.
 
+Story Time
+----------
+
+My first job out of school was at a small industrial automation
+company in Houston.  One of our products was what we called an
+Industrial Display Unit--basically a do-it-yourself user interface.
+If you wanted to control, say, a grain hopper, you might put the
+actual smarts into a PLC, and then use the display unit to put a
+configurable face on it.
+
+image::images/idu.png[]
 
 Case Studies
 ------------
