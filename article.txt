@@ -1,15 +1,6 @@
 Testing Embedded User Interfaces
 ================================
 
-This is an introductory talk--has to be.  Embedded devices are so
-different from one another.
-
-Desktop testing is fairly routine.  Capture/playback, GUI spidering,
-or just scripted.  (Academia hints at more scalable testing.) Basic
-idea: drive the GUI, check the response.  Combat fragility by keeping
-the top-level tests in the language of the problem domain--which also
-helps with readability.
-
 Story Time
 ----------
 
@@ -22,6 +13,58 @@ configurable face on it.
 
 image::images/idu.png[]
 
+As long as your PLC used one of the protocols we supported, like
+Modbus, it was pretty easy to customize.  By going in through an
+administrator interface, you could set up your own operator menus,
+through which you could read or write things like integers or booleans
+to the various device registers.
+
+Once you'd defined a couple of menus and assigned a couple of hotkeys,
+you might end up with something like this on the 25x4 display:
+
+--------------------------------------------------------------------
+       GRAIN PACKAGER
+> 1. Hopper   (30%)
+  2. Advanced
+[OPEN]            [CLOS]
+--------------------------------------------------------------------
+
+We had a few notes and sketches on legal pads: ideas on different ways
+to represent the menus, and so on.  Imagine for a moment that this was
+one of our use cases:
+
+--------------------------------------------------------------------
+Given a unit in admin mode
+When I set the title to "TESTING"
+When I add a boolean register called "Light" at address 4000
+And I reset the device
+Then the screen should say
+  """
+           TESTING
+  > 1. Light (OFF)
+
+  [TOGL]
+  """
+--------------------------------------------------------------------
+
+Our notes were just scribbled menu sketches with arrows pointing from
+one state to the next.  But they outlined the same kinds of use cases
+you see here.
+
+The test cycle for this device was pretty slow by today's standards.
+We'd compile the software (making sure we didn't have any 9-character
+variable names!), do a few incantations to get it onto the emulator,
+start the program, type in the admin password, and try editing a few
+menus.
+
+If things didn't work, we'd tweak the code, maybe try hijacking a
+corner of the LCD for debug info, and try again.  What I really wish
+I'd had back in those days was the foresight to put better developer
+hooks in the code.
+
+If we had, we could have turned the use case you see above into
+_running code_.
+
 Case Studies
 ------------
 
@@ -31,6 +74,12 @@ one-trick-pony devices that communicate only through buttons and LEDs.
 
 Embedded Desktop GUI
 ~~~~~~~~~~~~~~~~~~~~
+
+Desktop testing is fairly routine.  Capture/playback, GUI spidering,
+or just scripted.  (Academia hints at more scalable testing.) Basic
+idea: drive the GUI, check the response.  Combat fragility by keeping
+the top-level tests in the language of the problem domain--which also
+helps with readability.
 
 Let's take a first tiny step from the desktop world to the embedded
 world: packaging a full desktop OS inside a device.  Consider a
@@ -92,7 +141,7 @@ Before we hook things up to Cucumber, let's see how we'd mechanically
 perform this sequence of GUI operations in a standalone program
 calling the White APIs:
 
-[source,C#]
+[source,csharp]
 --------------------------------------------------------------------
 class ExampleProject
 {
@@ -128,7 +177,7 @@ write separate steps for things like +the amplitude should be 100+ or
 Here's the code from above, adapted into a C# class with the correct
 attributes:
 
-[source,C#]
+[source,csharp]
 --------------------------------------------------------------------
 class WaveformSteps
 {
@@ -142,7 +191,7 @@ class WaveformSteps
         win = app.GetWindows().First;
     }
 
-    [When("^I set the Waveform Type to \"([^\"]*)\"$"]
+    [When("^I set the Waveform Type to \"([^\"]*)\"$")]
     public void ISetTheWaveformTypeTo(string value)
     {
         var waveformType =
@@ -295,6 +344,29 @@ at all.'' Surely your project fits somewhere on this spectrum.  Well,
 except that there's some kind of vertical axis.  Avionics projects have
 their own stringent model-checking requirements, for instance.
 
+[source,ruby]
+--------------------------------------------------------------------
+Given /^I am neutral$/ do
+  port_str = '/dev/tty.usbserial-A800ek9T'
+  baud_rate = 9600
+  data_bits = 8
+  stop_bits = 1
+  parity = SerialPort::NONE
+
+  @sp = SerialPort.new(port_str, baud_rate, data_bits, stop_bits, parity)
+  @sp.read_timeout = 100
+  @sp.putc '!' while @sp.read != '!'
+end
+
+When /^I increase my happiness$/ do
+  @sp.putc '+'
+end
+
+Then /^I should be happy$/ do
+  @sp.putc '?'
+  @sp.read.to_i.should == Happy
+end
+--------------------------------------------------------------------
 
 Polyglot Testing
 ----------------
