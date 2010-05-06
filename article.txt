@@ -11,6 +11,7 @@ If you wanted to control, say, a grain hopper, you might put the
 actual smarts into a PLC, and then use the display unit to put a
 configurable face on it.
 
+.Embedded UI
 image::images/idu.png[]
 
 As long as your PLC used one of the protocols we supported, like
@@ -95,7 +96,8 @@ scripting language, we can.
 Let's look at one possible way this scenario can play out.  Imagine
 you're testing a GUI that looks like this:
 
-(figure)
+.A desktop GUI
+image::images/desktop.png[]
 
 If you're sketching out how you want the system to behave, you might
 come up with something like this:
@@ -287,12 +289,20 @@ TODO: Show how to put the step defs on the hardware
 Touch-Screen GUI
 ~~~~~~~~~~~~~~~~
 
-Show the basics of how Cucmber works.  Explain Win32 API connection.
+Now, we move from the desktop to the sometimes desktop-like world of
+touch-screen GUIs.
 
-[quote, Bryan O'Sullivan, blog comment (2009)]
+.A touch-screen GUI
+image::images/touchscreen.png[]
+
+Show the basics of how Cucumber works.  Explain Win32 API connection.
+
+********************************************************************
+[quote, Bryan O'Sullivan, 'http://bit.ly/cobolfetish[blog comment (2009)]']
 ____________________________________________________________________
 Oh wow.  I never knew that Rubyists had a Cobol fetish.
 ____________________________________________________________________
+********************************************************************
 
 
 Physical UI
