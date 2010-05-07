@@ -1,6 +1,11 @@
 \.DS_Store$
+
 ^docbook/
 ^embedgui\.xml$
 ^embedgui\.fo$
 ^fop\.cfg$
 ^embedgui\.pdf$
+
+ARMV4IDbg/
+\.dll$
+\.vcb$
