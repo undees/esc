@@ -1,0 +1,2 @@
+#!/bin/sh
+cat tcl/fun/steps.tcl "$@" | tclsh
