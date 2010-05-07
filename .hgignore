@@ -8,4 +8,5 @@
 
 ARMV4IDbg/
 \.dll$
+\.dylib$
 \.vcb$
