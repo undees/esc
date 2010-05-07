@@ -5,7 +5,7 @@ end
 When(/^I set the Waveform Type to "([^"]*)"$/) do |value|
   control = self.class.const_get "IDC_#{value.upcase}"
   result  = get("/ClickControl?parent=#{@win}&control=#{control}").to_i
-  result.to_i.should == 1
+  result.should == 1
 end
 
 Then(/^the Duty Cycle setting should be (.*)$/) do |state|

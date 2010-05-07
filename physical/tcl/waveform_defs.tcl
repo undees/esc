@@ -14,8 +14,3 @@ proc editEnabled {name} {
     expect \[01\]
     return $expect_out(0,string)
 }
-
-pushButton SINE
-editEnabled DUTY_CYCLE
-pushButton SQUARE
-editEnabled DUTY_CYCLE
