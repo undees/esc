@@ -1,0 +1,10 @@
+package require Expect
+
+set timeout 3
+spawn telnet localhost 54321
+
+send "PUSH:BUTTON SINE\n"
+expect 1
+
+send "EDIT:ENABLED? DUTY_CYCLE\n"
+expect 0
