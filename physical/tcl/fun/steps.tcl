@@ -1,8 +1,6 @@
 package require Expect
 
-set timeout 3
-spawn telnet 127.0.0.1 54321
-expect "Escape character"
+# test harness
 
 proc pass {} {
     # no-op
@@ -12,25 +10,21 @@ proc fail {} {
     error "Test step failed"
 }
 
-proc Feature: args {
-    # no-op
+proc noproc args {
+    foreach name $args {
+        proc $name args {
+            # no-op
+        }
+    }
 }
 
-proc In args {
-    # no-op
-}
+noproc Feature: Scenario: In As I
 
-proc As args {
-    # no-op
-}
+# tests
 
-proc I args {
-    # no-op
-}
-
-proc Scenario: args {
-    # no-op
-}
+set timeout 3
+spawn telnet 127.0.0.1 54321
+expect "Escape character"
 
 proc Given args {
     # no-op
