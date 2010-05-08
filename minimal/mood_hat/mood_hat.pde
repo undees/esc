@@ -6,7 +6,7 @@ int numMoods = 5;
 int heartbeatPin = 13;
 int ledPin = 9;
 int buttonPin = 2;
-int buttonNow = LOW;
+int buttonNow = HIGH;
 
 void setup()
 {
@@ -18,7 +18,7 @@ void setup()
 
 void loop()
 {
-  buttonNow = digitalRead(buttonPin);
+//  buttonNow = digitalRead(buttonPin);
 
   if (buttonNow == LOW) {
     increaseHappiness();
@@ -69,10 +69,16 @@ void loop()
 }
 
 void increaseHappiness() {
-  mood = (mood + 1) % numMoods;
+  if (mood < numMoods - 1)
+  {
+    mood += 1;
+  }
 }
 
 void decreaseHappiness() {
-  mood = (mood + numMoods - 1) % numMoods;
+  if (mood > 0)
+  {
+    mood -= 1;
+  }
 }
 

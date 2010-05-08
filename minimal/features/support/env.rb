@@ -11,7 +11,7 @@ class MoodWorld
     return @port if @port
 
     @port = SerialPort.new(ENV['MOOD_HAT'], 9600, 8, 1, SerialPort::NONE)
-    @port.read_timeout = 100
+    @port.read_timeout = 1000
     @port.putc '?' until @port.read =~ /\d/
     @port
   end
