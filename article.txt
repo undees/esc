@@ -19,7 +19,7 @@ fraction of the embedded platforms in popular use.  Instead of leaning
 on standards or common frameworks, embedded developers must rely on
 their own experience and adaptability.
 
-Over the next few pages, we're going to look at various kinds of
+Over the next few pages, we're going to consider various kinds of
 embedded systems, including:
 
 * A full desktop OS embedded in a device.
@@ -43,10 +43,10 @@ Let's imagine a waveform generator whose interface runs on Windows
 XPe, the embedded version of Windows XP:
 
 .An embedded desktop GUI
-image::images/desktop.png[]
+image::images/desktop.png[scaledwidth="60%"]
 
-Here's our test script, written for the http://cukes.info[Cucumber]
-test framework:
+Here's our test script, written for the Cucumber test framework.
+footnote:[http://cukes.info]
 
 --------------------------------------------------------------------
 include::desktop/features/waveform.feature[]
@@ -58,8 +58,10 @@ definition_, a piece of glue code representing that single GUI action.
 These can be written in any one of a handful of common programming
 languages.  For this first example, we'll start in Ruby.
 
+:bos quote: footnote:[http://bit.ly/cobolfetish]
+
 ********************************************************************
-[quote, Bryan O'Sullivan, 'http://bit.ly/cobolfetish[blog comment (2009)]']
+[quote, Bryan O'Sullivan, 'blog comment (2009) {bosquote}']
 ____________________________________________________________________
 Oh wow.  I never knew that Rubyists had a Cobol fetish.
 ____________________________________________________________________
@@ -68,11 +70,11 @@ ____________________________________________________________________
 What will the code in each of those definitions look like?  How is it
 going to find the running application and click the various controls?
 The simplest choice for this demo app is an open-source GUI automation
-library called http://wipflash.googlecode.com[WiPFlash].  WiPFlash is
-designed to test programs written using the Windows Presentation
-Framework (WPF).  (If you're driving a Windows Forms or a Win32
-program, you may want to look at a more full-featured library called
-http://white.codeplex.com[Project White].)
+library called WiPFlash. footnote:[http://wipflash.googlecode.com]
+WiPFlash is designed to test programs written using the Windows
+Presentation Framework (WPF).  (If you're driving a Windows Forms or a
+Win32 program, you may want to look at a more full-featured library
+called Project White. footnote:[http://white.codeplex.com].)
 
 The following Ruby code implements the three steps of our test script
 by driving the waveform generator's GUI.  While most of the code in
@@ -101,10 +103,9 @@ Cucumber and the overall test script on our PC.
 
 Porting the WiPFlash calls to C# is easy.  But how do we associate
 each step definition with the +Given+, +When+, or +Then+ step it
-represents?  The
-http://github.com/richardlawrence/cuke4nuke[Cuke4Nuke] project
-provides several source-code attributes you can add to your C# code
-for this purpose.
+represents?  The Cuke4Nuke project provides several source-code
+attributes you can add to your C# code for this
+purpose. footnote:[http://github.com/richardlawrence/cuke4nuke]
 
 [source,csharp]
 --------------------------------------------------------------------
@@ -141,7 +142,7 @@ the device.  What if we wanted our waveform generator interface to
 work on more stripped-down hardware running Windows CE?
 
 .A touch-screen GUI
-image::images/touchscreen.png[]
+image::images/touchscreen.png[scaledwidth="60%"]
 
 Let's say we're running on a device with a low-power-consumption
 processor and very little storage, and we've chosen not to include
@@ -164,9 +165,9 @@ include::touchscreen/features/step_definitions/waveform_steps.rb[]
 
 As before, the server will run in a standalone process on the
 hardware.  There are dozens of embeddable C-based web servers
-available.  http://mongoose.googlecode.com[Mongoose] is particularly
-easy to build for Windows CE.  Here's what one of the request handlers
-looks like.
+available.  Mongoose is particularly easy to build for Windows
+CE. footnote:[http://mongoose.googlecode.com] Here's what one of the
+request handlers looks like.
 
 [source,c]
 --------------------------------------------------------------------
@@ -182,7 +183,7 @@ operating system.  What if there's no GUI at all--just text painted on
 the screen?
 
 .A physical UI
-image::images/physical.png[]
+image::images/physical.png[scaledwidth="60%"]
 
 If there's no mouse and no keyboard, how do we simulate the user
 pushing a button?  By adding developer hooks to the software.  In this
@@ -230,5 +231,26 @@ the Cucumber test script, we can run the whole thing in Tcl.
 Minimal UI
 ~~~~~~~~~~
 
-(This section will talk about a homebrew C project running on the
-Arduino processor.)
+Just how far down can this approach scale?  Pretty far.  We're now
+going to take a departure from the world of waveform generators and
+build a much simpler device.  Unlike the previous hypothetical
+examples, this one will be real-world wearable computing project based
+on the Lilypad Arduino microcontroller
+board. footnote:[http://www.arduino.cc/en/Main/ArduinoBoardLilyPad]
+
+.A minimal UI
+image::images/4034984722.jpg[scaledwidth="60%"]
+
+_Image by Osamu
+Iwasaki. footnote:[http://www.flickr.com/photos/osamu_iwasaki/4034984722]
+Used under a Creative Commons license._
+footnote:[http://creativecommons.org/licenses/by-sa/2.0/deed.en]
+
+--------------------------------------------------------------------
+include::minimal/features/mood.feature.snippet[]
+--------------------------------------------------------------------
+
+[source,ruby]
+--------------------------------------------------------------------
+include::minimal/features/step_definitions/mood_steps.rb[]
+--------------------------------------------------------------------

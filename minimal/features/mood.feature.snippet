@@ -1,0 +1,9 @@
+  Scenario Outline: Getting happier
+    Given I am <feeling_now>
+    When I <change> my happiness
+    Then I should be <feeling_next>
+
+    Examples:
+      | feeling_now | change   | feeling_next |
+      | happy       | increase | ecstatic     |
+      | happy       | decrease | neutral      |
