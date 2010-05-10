@@ -1,10 +1,10 @@
 Given(/^a waveform$/) do
   launcher = ApplicationLauncher.new
   app      = launcher.recycle 'WaveformApp'
-  @win     = app.find_window 'Waveform'
+  @win     = app.find_window  'Waveform'
 end
 
-When(/^I set the Waveform Type to "([^"]*)"$/) do |value|
+When(/^I set the Waveform Type to "([^\"]*)"$/) do |value|
   radio_buttons = @win.method(:find).of(RadioButton)
   waveform_type = radio_buttons[value.downcase]
   waveform_type.select

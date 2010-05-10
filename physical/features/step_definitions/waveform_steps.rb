@@ -2,7 +2,7 @@ Given(/^a waveform$/) do
   # no-op
 end
 
-When(/^I set the Waveform Type to "([^"]*)"$/) do |value|
+When(/^I set the Waveform Type to "([^\"]*)"$/) do |value|
   tcl.eval "pushButton #{value.upcase}"
 end
 
