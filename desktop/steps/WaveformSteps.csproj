@@ -32,9 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cuke4Nuke.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ext\Cuke4Nuke\Cuke4Nuke\Server\bin\Release\Cuke4Nuke.Framework.dll</HintPath>
+    <Reference Include="Cuke4Nuke.Framework">
+      <HintPath>..\..\..\ext\Cuke4Nuke\Cuke4Nuke\Server\bin\Release\Cuke4Nuke.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -45,7 +44,7 @@
     <Reference Include="UIAutomationClient" />
     <Reference Include="UIAutomationTypes" />
     <Reference Include="WiPFlash">
-      <HintPath>..\..\ext\wipflash\WiPFlash\bin\Release\WiPFlash.dll</HintPath>
+      <HintPath>..\..\..\ext\wipflash\WiPFlash\bin\Release\WiPFlash.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
