@@ -13,5 +13,6 @@ Release/
 \.dll$
 \.dylib$
 \.so$
+\.suo$
 \.vcb$
 \.vco$
