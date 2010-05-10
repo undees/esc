@@ -1,6 +1,10 @@
 Testing Embedded User Interfaces
 ================================
 
+++++++++++++++++++++++++++++++++++++++++++++++++
+<subtitle>With Open-Source Frameworks</subtitle>
+++++++++++++++++++++++++++++++++++++++++++++++++
+
 Search the Internet for ``test desktop user interface'' or ``test web
 user interface,'' and you'll find dozens of test frameworks nestled
 among the books, articles, and blogs.  But if you look for ``test
@@ -106,7 +110,7 @@ by driving the waveform generator's user interface.  It's easy to make
 C# GUI automation calls from Ruby; we just use IronRuby, an
 implementation of the language that runs on the .NET
 platform. footnote:[http://ironruby.net] (This is the only
-IronRuby-specific code in the article; the rest will run on almost any
+IronRuby-specific code in the paper; the rest will run on almost any
 Ruby implementation.)
 
 [source,ruby]
@@ -149,7 +153,7 @@ networking for us.  Back on the PC, we edit a single configuration
 file to tell Cucumber the IP address of the device under test.
 
 To see how the whole project directory structure is laid out, please
-refer to the source code accompanying this article.
+refer to the source code accompanying this paper.
 
 
 Touch-Screen GUI
@@ -211,7 +215,7 @@ image::images/physical.png[scaledwidth="60%"]
 
 If there's no mouse and no keyboard, how do we simulate pushing a
 physical button on a front panel?  By adding developer hooks to the
-software.  In this hypothetical example, the device supports a
+software.  In this hypothetical example, the device supports a TCP
 remote-control interface with simple commands like +PUSH:BUTTON
 <name>+.
 
@@ -298,9 +302,9 @@ include::minimal/features/mood.feature.snippet[]
 How do we implement the individual steps of this test? All we have to
 do is add a developer hook to the firmware: a serial port listener
 that responds to incoming commands.  The command set is a simple
-collection of one-character commands: + and - to change the mood, ? to
-ask what the current mood is, and any number from 0 (furious) to 4
-(ecstatic) to set the mood to a specific level.
+collection of one-character commands: `+` and `-` to change the mood,
+`?` to ask what the current mood is, and any number from `0` (furious)
+to `4` (ecstatic) to set the mood to a specific level.
 
 Here are the step definitions for this test.
 
@@ -321,11 +325,11 @@ device hasn't yet passed the smoke test.)
 Wrapping Up
 -----------
 
-Over the course of this article, we've tested four different kinds of
+Over the course of this paper, we've tested four different kinds of
 embedded user interfaces.  As we've moved from platform to platform,
 we've chosen different places to attach our test script to the GUI.
-In some cases, the operating system has provided automation APIs for us.
-In others, we've chosen to embed our own custom developer hooks
+In some cases, the operating system has provided automation APIs for
+us.  In others, we've chosen to embed our own custom developer hooks
 directly into the application under test.  At every step of the way,
 we've been able to reach into our toolbox and find open-source
 libraries to assist with the tasks at hand.
