@@ -153,7 +153,8 @@ networking for us.  Back on the PC, we edit a single configuration
 file to tell Cucumber the IP address of the device under test.
 
 To see how the whole project directory structure is laid out, please
-refer to the source code accompanying this paper.
+refer to the source code accompanying this
+paper. footnote:[http://github.com/undees/esc]
 
 
 Touch-Screen GUI
