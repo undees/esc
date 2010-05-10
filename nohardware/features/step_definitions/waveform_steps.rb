@@ -5,15 +5,19 @@ Given(/^a waveform$/) do
 end
 
 When(/^I set the Waveform Type to "([^"]*)"$/) do |value|
-  @win.method(:find).of(RadioButton)[value.downcase].select
+  radio_buttons = @win.method(:find).of(RadioButton)
+  waveform_type = radio_buttons[value.downcase]
+  waveform_type.select
 end
 
 Then(/^the Duty Cycle setting should be (.*)$/) do |state|
-  want_enabled = (state == "enabled")
+  text_boxes = @win.method(:find).of(TextBox)
+  duty_cycle = text_boxes['dutyCycle']
 
-  duty_cycle = @win.method(:find).of(TextBox)['dutyCycle']
   is_enabled = duty_cycle.element.
     get_current_property_value(AutomationElement.IsEnabledProperty)
+
+  want_enabled = (state == "enabled")
 
   is_enabled.should == want_enabled
 end

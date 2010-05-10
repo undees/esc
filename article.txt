@@ -7,31 +7,36 @@ among the books, articles, and blogs.  But if you look for ``test
 embedded user interface'' instead, the toolkit pickings are slim.  Why
 is that?
 
-A software library for testing desktop software need only deal with
-two or three platforms to cover most people's PCs.  The story is even
-better for web testing, which only has to support one platform: HTTP.
+The desktop and the web share a few traits that have led to a
+proliferation of testing projects.  First, both are dominated by a
+small set of platforms: the Windows / Mac / Linux triad on the
+desktop, and HTTP on the web.  Second, both provide standard widget
+sets--buttons, edit controls, hyperlinks--which automation libraries
+can tie into.
+
 By contrast, there are hundreds of different kinds of embedded user
 interfaces, ranging from full desktop OSes down to no interface at
-all.
+all.  Some are built using standard on-screen controls provided by the
+operating system, while others must set individual pixels directly.
 
 No testing toolkit or technique could hope to cover more than a small
 fraction of the embedded platforms in popular use.  Instead of leaning
 on standards or common frameworks, embedded developers must rely on
-their own experience and adaptability.
+their own experience, resourcefulness, and adaptability.
 
 Over the next few pages, we're going to consider various kinds of
 embedded systems, including:
 
 * A full desktop OS embedded in a device.
 * A touchscreen OS supporting many desktop-like metaphors.
-* A interface consisting only of readouts and physical buttons.
+* An interface consisting only of readouts and physical buttons.
 * A simple device whose interface is just a few switches and LEDs.
 
 For each one of these categories, we'll look at how we might test a
 hypothetical device belonging to that category.
 
-Embedded Desktop GUI
-~~~~~~~~~~~~~~~~~~~~
+Embedded Desktop-Style GUI
+--------------------------
 
 When you have nearly the full power of a desktop OS at your disposal,
 you have the luxury of building your test script atop one of the many
@@ -39,103 +44,113 @@ GUI automation libraries for your platform.  Moreover, you can often
 run a few ``smoke tests'' of the application on your own PC before
 deploying to the target device.
 
-Let's imagine a waveform generator whose interface runs on Windows
-XPe, the embedded version of Windows XP:
+Let's imagine a piece of test equioment--a waveform generator,
+say--whose interface runs on Windows XPe, the embedded version of
+Windows XP.
 
-.An embedded desktop GUI
+.An embedded desktop-style GUI
 image::images/desktop.png[scaledwidth="60%"]
 
-Here's our test script, written for the Cucumber test framework.
-footnote:[http://cukes.info]
+There are a number of ways we might write a simple automated smoke
+test for such an interface.  We might use a capture / playback tool to
+record a live interaction and replay it later.  We might use a
+spidering tool to detect all the on-screen controls and deduce which
+of their properties need to be tested.  For this example, though,
+we're going to write an automated script which will simulate a few
+mouse clicks and watch what happens.
+
+One advantage of driving a user interface from hand-written test
+scripts is that you don't have to wait for working software to be
+available before you can start writing your tests.  In fact, you can
+begin writing scripts early enough for them to help the design
+process--by serving as use cases, driving out gaps in the
+requirements, and so on.
+
+This notion of test scripts doing double duty as design documents is
+related to the software practice known as Behavior-Driven
+Development. footnote:[http://www.behaviour-driven.org] A full
+discussion of BDD is beyond the scope of this paper.  We will be
+considering only its core practice, which is writing _executable
+examples_, which are specifications that just happen to be in the form
+of runnable test code.
+
+Here's a simple use case for the waveform generator interface
+described above.  It was written using Cucumber, a BDD test
+framework. footnote:[http://cukes.info]
 
 --------------------------------------------------------------------
 include::desktop/features/waveform.feature[]
 --------------------------------------------------------------------
 
-The heart of the test is the section with the +Given+, +When+, and
-+Then+ lines.  When Cucumber sees each of those, it looks for a _step
-definition_, a piece of glue code representing that single GUI action.
-These can be written in any one of a handful of common programming
-languages.  For this first example, we'll start in Ruby.
+This user story is just plain English, but it's also an automated
+test.  The heart of the test is the section with the +Given+, +When+,
+and +Then+ lines.  When Cucumber sees each of those, it looks for a
+_step definition_, a piece of glue code that carries out that single
+GUI action.  These can be written in any one of a handful of common
+programming languages.  For this first example, we'll start in Ruby,
+which happens to be what Cucumber was written in.
 
-:bos quote: footnote:[http://bit.ly/cobolfetish]
-
-********************************************************************
-[quote, Bryan O'Sullivan, 'blog comment (2009) {bosquote}']
-____________________________________________________________________
-Oh wow.  I never knew that Rubyists had a Cobol fetish.
-____________________________________________________________________
-********************************************************************
-
-What will the code in each of those definitions look like?  How is it
-going to find the running application and click the various controls?
-The simplest choice for this demo app is an open-source GUI automation
-library called WiPFlash. footnote:[http://wipflash.googlecode.com]
-WiPFlash is designed to test programs written using the Windows
-Presentation Framework (WPF).  (If you're driving a Windows Forms or a
-Win32 program, you may want to look at a more full-featured library
-called Project White. footnote:[http://white.codeplex.com].)
+What should the Ruby code in each of those definitions look like?  How
+is it going to find the running application and click the various
+controls?  The simplest choice for this demo app is an open-source GUI
+automation library called
+WiPFlash. footnote:[http://wipflash.googlecode.com] WiPFlash is
+designed to test programs written using the Windows Presentation
+Framework (WPF).  (If you're driving a Windows Forms or a Win32
+program, you may want to look at a more full-featured library called
+Project White. footnote:[http://white.codeplex.com].)
 
 The following Ruby code implements the three steps of our test script
 by driving the waveform generator's GUI.  While most of the code in
-this article will work on any of Ruby's many implementations, this
+this article will work on any of Ruby's many implementations, this one
 excerpt requires IronRuby, a version of Ruby that runs on the .NET
-platform.
+platform. footnote:[http://ironruby.net]
 
 [source,ruby]
 --------------------------------------------------------------------
 include::nohardware/features/step_definitions/waveform_steps.rb[]
 --------------------------------------------------------------------
 
-With that code in +waveform_steps.rb+, you can run the test by
-invoking Cucumber from the command line:
-
---------------------------------------------------------------------
-C:\Project> cucumber
---------------------------------------------------------------------
+We're not going to go over that code in gruesome detail here.
+Hopefully, it's at least clear that each step definition performs a
+few GUI actions--finding a running program, clicking a button, or
+seeing whether a control is enabled.  The line that says
++is_enabled.should == want_enabled+ is an _expectation_, which in BDD
+parlance means that this code will log a test failure if the GUI
+doesn't match what we're expecting.
 
 Once we're satisfied that the app passes this simple use case on the
-desktop, how do we test it on the real hardware?  For the sake of this
-example, let's assume our target hardware is a poor fit for installing
-all of IronRuby onto it.  Instead, we'd like to port the step
-definitions to C# and move them onto the device, while keeping
-Cucumber and the overall test script on our PC.
+desktop, how do we test it on real hardware?  For the sake of this
+example, let's assume our target device is powerful enough to run C#,
+but not IronRuby.  We'll need to port our step definitions to C# and
+move them onto the device, but we can still keep Ruby, Cucumber, and
+the overall test script on our PC.
 
-Porting the WiPFlash calls to C# is easy.  But how do we associate
-each step definition with the +Given+, +When+, or +Then+ step it
-represents?  The Cuke4Nuke project provides several source-code
-attributes you can add to your C# code for this
-purpose. footnote:[http://github.com/richardlawrence/cuke4nuke]
+The low-level calls into WiPFlash will look pretty much the same in C#
+as they do in Ruby.  But how do we tag the step definitions with the
++Given+, +When+, and +Then+ steps they represent?  By putting each
+step into its own C# function, and annotating that function with some
+extra information. A project called Cuke4Nuke provides these
+source-code attributes for
+us. footnote:[http://github.com/richardlawrence/cuke4nuke]
 
 [source,csharp]
 --------------------------------------------------------------------
 include::desktop/steps/WaveformStepsSnippet.cs[]
 --------------------------------------------------------------------
 
-Once you've built this code into a DLL, all you have to do is copy it
-and the C#-based +Cuke4Nuke.Server.exe+ to the target hardware, then
-launch the server:
+This code gets compiled into a DLL and copied down to the target
+hardware--along with +Cuke4Nuke.Server.exe+, a small program that
+loads our DLL into memory and then takes care of the low-level
+networking for us.  Back on the PC, we edit a single configuration
+file to tell Cucumber the IP address of the device under test.
 
---------------------------------------------------------------------
-C:\Hardware> Cuke4Nuke.Server.exe -a WaveformSteps.dll
---------------------------------------------------------------------
-
-Back on the PC, you'll remove the old +waveform_steps.rb+ file and
-replace it with one called +cucumber.wire+, which contains the IP
-address of the device under test:
-
---------------------------------------------------------------------
-host: 10.0.0.100
-port: 3901
---------------------------------------------------------------------
-
-Now, you can run Cucumber exactly as before.  This time, it will
-connect to the server running on the hardware, and direct the tests
-over TCP.
+To see how the whole project directory structure is laid out, please
+refer to the source code accompanying this article.
 
 
 Touch-Screen GUI
-~~~~~~~~~~~~~~~~
+----------------
 
 The previous example assumed a full-powered desktop OS was running on
 the device.  What if we wanted our waveform generator interface to
@@ -148,10 +163,10 @@ Let's say we're running on a device with a low-power-consumption
 processor and very little storage, and we've chosen not to include
 .NET in the platform build.  We can still use the idea of a server
 listening to TCP requests from the PC and performing various GUI
-actions.  We'll just have to move some of the smarts up into the PC.
-Instead of sending commands over the wire that say, ``Turn on the Sine
-waveform,'' we'll send requests for more basic GUI actions, such as
-``Tell me the mouse coordinates for control #1005.''
+actions.  We'll just have to move some of the ``smarts'' up into the
+PC.  Instead of sending commands over the wire that say, ``Turn on the
+Sine waveform,'' we'll send requests for more basic building blocks,
+such as ``Simulate a mouse click in the center of control #1005.''
 
 We can use any protocol we want to represent the commands and
 parameters.  Why reinvent the wheel?  Let's use HTTP.  Here are the
@@ -163,9 +178,13 @@ HTTP GET requests.
 include::touchscreen/features/step_definitions/waveform_steps.rb[]
 --------------------------------------------------------------------
 
+<1> The test script uses the same names for controls, such as
++IDC_SINE+, that the C++ program does.
+
 As before, the server will run in a standalone process on the
-hardware.  There are dozens of embeddable C-based web servers
-available.  Mongoose is particularly easy to build for Windows
+hardware.  We could use any of the dozens of embeddable C-based web
+servers on the market.  The Mongoose project is a good fit for our
+purposes, as it's easy to build for Windows
 CE. footnote:[http://mongoose.googlecode.com] Here's what one of the
 request handlers looks like.
 
@@ -174,9 +193,14 @@ request handlers looks like.
 include::touchscreen/server/main_snippet.c[]
 --------------------------------------------------------------------
 
+The main difference between this server and the one from the previous
+example is the level of detail they contain.  The previous server knew
+specifically how to turn on the Sine waveform.  This one only knows
+how to find a window by name or numeric ID, and click on it.
+
 
 Physical UI
-~~~~~~~~~~~
+-----------
 
 All of the examples so far have leaned on GUI controls built into the
 operating system.  What if there's no GUI at all--just text painted on
@@ -208,16 +232,20 @@ glue in between:
 include::physical/features/step_definitions/waveform_steps.rb[]
 --------------------------------------------------------------------
 
-Before moving on, let's perform one final flourish: cutting Ruby and
-Cucumber out of the equation, and running the test script purely in
-Tcl.  How is this possible?  It turns out that Cucumber syntax, with
-its emphasis on spaces over punctuation, looks a lot like Tcl.  To
-Tcl, the phrase +When I set the Waveform Type to "Sine"+ is a
-simple call to a function named +When+, with parameters +"I"+,
-+"set"+, and so on.
+Before we move on, let's perform one final flourish, just for fun.
+Imagine we have to fit our automation scripts into an existing
+Tcl-based test harness, and running Ruby simply isn't an option.  How
+much effort would it take to adapt a Cucumber test script to run in
+Tcl?
 
-So if we define this seven-argument function, and ignore all but the
-final parameter, we have something like this:
+Surprisingly little.  It turns out that Cucumber syntax, with its
+emphasis on spaces instead of punctuation, looks a lot like Tcl.  To
+Tcl, the phrase +When I set the Waveform Type to "Sine"+ is a simple
+call to a function named +When+, with parameters +"I"+, +"set"+, and
+so on.
+
+So if we define a seven-argument +When+ function, and ignore all but
+the final parameter, we end up with something like this:
 
 [source,tcl]
 --------------------------------------------------------------------
@@ -225,18 +253,20 @@ include::physical/tcl/fun/steps_snippet.tcl[]
 --------------------------------------------------------------------
 
 Once we've done the same thing for the rest of the ``functions'' in
-the Cucumber test script, we can run the whole thing in Tcl.
+the Cucumber test script, we can run the exact same plain-English test
+code in Tcl that we've been running in Cucumber.
 
 
 Minimal UI
-~~~~~~~~~~
+----------
 
 Just how far down can this approach scale?  Pretty far.  We're now
 going to take a departure from the world of waveform generators and
 build a much simpler device.  Unlike the previous hypothetical
-examples, this one will be real-world wearable computing project based
-on the Lilypad Arduino microcontroller
-board. footnote:[http://www.arduino.cc/en/Main/ArduinoBoardLilyPad]
+examples, this one will be real-world wearable computing project.  At
+the heart of the system will be a Lilypad Arduino microcontroller
+board like the one pictured
+below. footnote:[http://www.arduino.cc/en/Main/ArduinoBoardLilyPad]
 
 .A minimal UI
 image::images/4034984722.jpg[scaledwidth="60%"]
@@ -246,11 +276,55 @@ Iwasaki. footnote:[http://www.flickr.com/photos/osamu_iwasaki/4034984722]
 Used under a Creative Commons license._
 footnote:[http://creativecommons.org/licenses/by-sa/2.0/deed.en]
 
+My children and I are building a device we call the ``Mood Hat.''
+It's a baseball cap with two buttons, five LEDs, and a circuit board
+sewn into it.  Each LED represents a mood, ranging from ``furious'' to
+``ecstatic.''  By pressing the ``up'' or ``down'' button, one can
+adjust the hat to match one's inner state--wearing one's heart on
+one's hatband, so to speak.
+
+The buttons and lights are this device's sole user interface.  It
+might seem like this kind of project is too primitive for the testing
+techniques discussed in this paper.  But even the Mood Hat can be
+connected to an automated test script.  Using a table-driven approach,
+we can express all of the system's possible inputs and outputs in
+Cucumber.  Here are a couple of rows from such a table:
+
 --------------------------------------------------------------------
 include::minimal/features/mood.feature.snippet[]
 --------------------------------------------------------------------
+
+How do we implement the individual steps of this test? All we have to
+do is add a developer hook to the firmware: a serial port listener
+that responds to incoming commands.  The command set is a simple
+collection of one-character commands: + and - to change the mood, ? to
+ask what the current mood is, and any number from 0 (furious) to 4
+(ecstatic) to set the mood to a specific level.
+
+Here are the step definitions for this test.
 
 [source,ruby]
 --------------------------------------------------------------------
 include::minimal/features/step_definitions/mood_steps.rb[]
 --------------------------------------------------------------------
+
+This script was more than just an exercise to prove a point.  It
+actually came in handy during development.  When I was simplifying the
+Arduino firmware for this project, rerunning the automated GUI tests
+was the first line of defense against regressions.  (The second, and
+much more important, line of defense was playing with the device
+manually.  But there's no point in starting a manual test if the
+device hasn't yet passed the smoke test.)
+
+
+Wrapping Up
+-----------
+
+Over the course of this article, we've tested four different kinds of
+embedded user interfaces.  As we've moved from platform to platform,
+we've chosen different places to attach our test script to the GUI.
+In some cases, the operating system has provided automation APIs for us.
+In others, we've chosen to embed our own custom developer hooks
+directly into the application under test.  At every step of the way,
+we've been able to reach into our toolbox and find open-source
+libraries to assist with the tasks at hand.
