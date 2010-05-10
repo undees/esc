@@ -12,7 +12,8 @@ proliferation of testing projects.  First, both are dominated by a
 small set of platforms: the Windows / Mac / Linux triad on the
 desktop, and HTTP on the web.  Second, both provide standard widget
 sets--buttons, edit controls, hyperlinks--which automation libraries
-can tie into.
+can tie into.  In other words, toolkits are both broad in reach and
+easy to create.
 
 By contrast, there are hundreds of different kinds of embedded user
 interfaces, ranging from full desktop OSes down to no interface at
@@ -91,8 +92,8 @@ programming languages.  For this first example, we'll start in Ruby,
 which happens to be what Cucumber was written in.
 
 What should the Ruby code in each of those definitions look like?  How
-is it going to find the running application and click the various
-controls?  By leaning on a GUI automation library.  The simplest
+are we going to find the running application and click the various
+controls?  We'll lean on a GUI automation library.  The simplest
 choice for this demo app is an open-source C# GUI project called
 WiPFlash. footnote:[http://wipflash.googlecode.com] WiPFlash is
 designed to test programs written using the Windows Presentation
@@ -101,9 +102,9 @@ program, you may want to look at a more full-featured library called
 Project White. footnote:[http://white.codeplex.com].)
 
 The following Ruby code implements the three steps of our test script
-by driving the waveform generator's GUI.  It's easy to make C# GUI
-automation calls from Ruby; we just use IronRuby, an implementation of
-the language that runs on the .NET
+by driving the waveform generator's user interface.  It's easy to make
+C# GUI automation calls from Ruby; we just use IronRuby, an
+implementation of the language that runs on the .NET
 platform. footnote:[http://ironruby.net] (This is the only
 IronRuby-specific code in the article; the rest will run on almost any
 Ruby implementation.)
@@ -179,9 +180,6 @@ HTTP GET requests.
 --------------------------------------------------------------------
 include::touchscreen/features/step_definitions/waveform_steps.rb[]
 --------------------------------------------------------------------
-
-<1> The test script uses the same names for controls, such as
-+IDC_SINE+, that the C++ program does.
 
 As before, the server will run in a standalone process on the
 hardware.  We could use any of the dozens of embeddable C-based web
