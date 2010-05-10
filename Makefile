@@ -2,7 +2,7 @@
 DOCUMENT = embedgui.xml
 
 $(DOCUMENT): article.txt
-	asciidoc -b docbook -o embedgui.xml article.txt
+	asciidoc -a docinfo -b docbook -o embedgui.xml article.txt
 
 # Include the DocBook Kit's makefile rules
 include docbook-kit/tools/Makefile.inc
