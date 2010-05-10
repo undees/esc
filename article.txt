@@ -49,7 +49,7 @@ GUI automation libraries for your platform.  Moreover, you can often
 run a few ``smoke tests'' of the application on your own PC before
 deploying to the target device.
 
-Let's imagine a piece of test equioment--a waveform generator,
+Let's imagine a piece of test equipment--a waveform generator,
 say--whose interface runs on Windows XPe, the embedded version of
 Windows XP.
 
@@ -88,12 +88,13 @@ include::desktop/features/waveform.feature[]
 --------------------------------------------------------------------
 
 This user story is just plain English, but it's also an automated
-test.  The heart of the test is the section with the +Given+, +When+,
-and +Then+ lines.  When Cucumber sees each of those, it looks for a
-_step definition_, a piece of glue code that carries out that single
-GUI action.  These can be written in any one of a handful of common
-programming languages.  For this first example, we'll start in Ruby,
-which happens to be what Cucumber was written in.
+test.  The first few lines are commentary--we want the test to justify
+its existence.  The heart of the test is the section with the +Given+,
++When+, and +Then+ lines.  When Cucumber sees each of those, it looks
+for a _step definition_, a piece of glue code that carries out that
+single GUI action.  These can be written in any one of a handful of
+common programming languages.  For this first example, we'll start in
+Ruby, which happens to be what Cucumber was written in.
 
 What should the Ruby code in each of those definitions look like?  How
 are we going to find the running application and click the various
