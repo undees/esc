@@ -4,7 +4,7 @@ Feature: Mood hat
   As a passionate person
   I want to display my mood on my hat
 
-  Scenario Outline: Getting happier
+  Scenario Outline: Changing mood
     Given I am <feeling_now>
     When I <change> my happiness
     Then I should be <feeling_next>
