@@ -1,84 +1,97 @@
-int inByte = 0;
-int mood = 2;
-int moodByte = '2';
-int numMoods = 5;
+#define NUM_MOODS 5
+#define NEUTRAL   ((NUM_MOODS - 1) / 2)
 
-int heartbeatPin = 13;
-int ledPin = 9;
-int buttonPin = 2;
-int buttonNow = HIGH;
+#define UP    '+'
+#define DOWN  '-'
+#define RESET '!'
+#define QUERY '?'
+#define NONE  -1
 
-void setup()
-{
-  pinMode(buttonPin, INPUT);
-  pinMode(ledPin, OUTPUT);
+int upPin              = 2;
+int downPin            = 3;
+int ledPins[NUM_MOODS] = {6, 7, 8, 9, 10};
+int heartbeatPin       = 13;
+
+int mood = NEUTRAL;
+
+void setup() {
+  int pindex;
+  for (pindex = 0; pindex < NUM_MOODS; ++pindex) {
+    pinMode(ledPins[pindex], OUTPUT);
+  }
+
+  pinMode(upPin,   INPUT);
+  pinMode(downPin, INPUT);
 
   Serial.begin(9600);
+
+  setMood(NEUTRAL);
 }
 
-void loop()
-{
-//  buttonNow = digitalRead(buttonPin);
+void loop() {
+  int button = buttonPressed();
+  int serial = commandReceived();
+  int event = (button != NONE ? button : serial);
 
-  if (buttonNow == LOW) {
-    increaseHappiness();
-    delay(100);
+  switch (event) {
+    case UP:
+      setMood(mood + 1);
+      break;
+    case DOWN:
+      setMood(mood - 1);
+      break;
+    case RESET:
+      setMood(NEUTRAL);
+      break;
+    case QUERY:
+      replyWithMood();
+      break;
+    default:
+      setMood(event - '0');
+      break;
   }
 
+  flashHeartbeat();
+}
+
+int buttonPressed() {
+  if (LOW == digitalRead(upPin)) {
+    return UP;
+  }
+
+  if (LOW == digitalRead(downPin)) {
+    return DOWN;
+  }
+
+  return NONE;
+}
+
+int commandReceived() {
   if (Serial.available() > 0) {
-    inByte = Serial.read();
-
-    if (inByte == '!') {
-      mood = 2;
-      Serial.print(inByte, BYTE);
-    }
-    else if (inByte == '+') {
-      increaseHappiness();
-    }
-    else if (inByte == '-') {
-      decreaseHappiness();
-    }
-    else if (inByte == '0') {
-      mood = 0;
-    }
-    else if (inByte == '1') {
-      mood = 1;
-    }
-    else if (inByte == '2') {
-      mood = 2;
-    }
-    else if (inByte == '3') {
-      mood = 3;
-    }
-    else if (inByte == '4') {
-      mood = 4;
-    }
-    else if (inByte == '?') {
-      moodByte = mood + '0';
-      Serial.print(moodByte, BYTE);
-    }
-  }
-  else {
-    digitalWrite(heartbeatPin, HIGH);
-    delay(50);
-    digitalWrite(heartbeatPin, LOW);
-    delay(50);
+    return Serial.read();
   }
 
-  analogWrite(ledPin, mood * 255 / numMoods);
+  return NONE;
 }
 
-void increaseHappiness() {
-  if (mood < numMoods - 1)
-  {
-    mood += 1;
-  }
+void replyWithMood() {
+  Serial.print('0' + mood, BYTE);
 }
 
-void decreaseHappiness() {
-  if (mood > 0)
-  {
-    mood -= 1;
+void setMood(int newMood) {
+  if (newMood < 0 || newMood >= NUM_MOODS) {
+    return;
   }
+
+  digitalWrite(ledPins[mood], LOW);
+  mood = newMood;
+  digitalWrite(ledPins[mood], HIGH);
+}
+
+void flashHeartbeat() {
+  digitalWrite(heartbeatPin, HIGH);
+  delay(50);
+  digitalWrite(heartbeatPin, LOW);
+  delay(50);
 }
 
