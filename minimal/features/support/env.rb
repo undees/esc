@@ -1,29 +1,28 @@
 require 'serialport'
 
-class MoodWorld
-  @@port = nil
-
+module MoodHelper
   Emotions = %w(furious unhappy neutral happy ecstatic)
+
+  attr_reader :port
 
   def int_for(emotion)
     Emotions.index emotion
   end
 
-  def port
-    return @@port if @@port
+  def open_port
+    @port = SerialPort.new(ENV['MOOD_HAT'], 9600, 8, 1, SerialPort::NONE)
+    @port.read_timeout    = 500
+    @port.wait_after_send = 500 if @port.respond_to?(:wait_after_send=)
 
-    @@port = SerialPort.new(ENV['MOOD_HAT'], 9600, 8, 1, SerialPort::NONE)
-    @@port.read_timeout    = 2000
-    @@port.wait_after_send = 1000 if @port.methods.include? :wait_after_send=
-
-    @@port.putc('?') until (@@port.read =~ /\d/ rescue nil)
-    @@port
+    @port.putc('?') until (@port.read =~ /\d/ rescue nil)
   end
 
-  def self.close
-    @@port.close if @@port
+  def close_port
+    @port.close
   end
 end
 
-World   { MoodWorld.new   }
-at_exit { MoodWorld.close }
+Before {open_port}
+After  {close_port}
+
+World  MoodHelper
