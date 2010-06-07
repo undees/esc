@@ -20,7 +20,6 @@ namespace WaveformSteps
             var launcher = new ApplicationLauncher();
             app = launcher.Recycle("WaveformApp");
             win = app.FindWindow("Waveform");
-
         }
 
         [When("^I set the Waveform Type to \"([^\"]*)\"$")]
@@ -34,13 +33,13 @@ namespace WaveformSteps
         {
             var wantEnabled = (state == "enabled");
             var dutyCycle   = win.Find<TextBox>("dutyCycle");
-            var isEnabled   = (bool)dutyCycle.Element.GetCurrentPropertyValue(AutomationElement.IsEnabledProperty);
+            var isEnabled   = (bool)
+                dutyCycle.Element.GetCurrentPropertyValue(
+                    AutomationElement.IsEnabledProperty);
 
             if (isEnabled != wantEnabled)
-            {
-                throw new Exception("Expected duty cycle to be " + state);
-            }
+                throw new Exception(
+                    "Expected duty cycle to be " + state);
         }
     }
 }
-    
