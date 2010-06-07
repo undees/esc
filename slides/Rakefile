@@ -1,0 +1,18 @@
+require 'erubis'
+require 'lib/snippets'
+
+include Snippets
+
+desc 'Update code snippets on slides'
+task :snippets do
+  finder = Finder.new '~/src/esc', 4
+  code_in = finder.method :code_in
+
+  Dir['**/*.erb'].each do |path|
+    target = path.sub /\.erb$/, '.md'
+    input = IO.read path
+    eruby = Erubis::Eruby.new input
+
+    File.open(target, 'w') { |f| f.puts eruby.result(binding) }
+  end
+end

@@ -1,0 +1,69 @@
+!SLIDE center
+
+# 1\. Desktop #
+
+![desktop](desktop.png)
+
+!SLIDE
+
+# Behavior-Driven Development #
+
+## Cucumber framework ##
+## http://cukes.info ##
+
+!SLIDE
+
+<%= code_in['desktop/features/waveform.feature'] %>
+
+!SLIDE
+
+## "I never knew that Rubyists had a COBOL fetish." ##
+### Bryan O'Sullivan ###
+
+!SLIDE
+
+<%= code_in['desktop/features/waveform.feature'] %>
+
+!SLIDE
+
+# Testing on the<br/>Same Machine #
+
+## WiPFlash GUI automation framework ##
+## http://wipflash.googlecode.com ##
+
+!SLIDE
+
+    @@@ruby
+<%= code_in['nohardware/features/step_definitions/waveform_steps.rb'].from(/Given/).through(/end/) %>
+
+!SLIDE
+
+    @@@ruby
+<%= code_in['nohardware/features/step_definitions/waveform_steps.rb'].from(/When/).through(/end/) %>
+
+!SLIDE
+
+    @@@ruby
+<%= code_in['nohardware/features/step_definitions/waveform_steps.rb'].from(/Then/).through(/end/) %>
+
+!SLIDE
+
+# Testing across<br/>the network #
+
+## Cuke4Nuke TCP server for Cucumber ##
+## http://github.com/richardlawrence/cuke4nuke ##
+
+!SLIDE
+
+    @@@csharp
+<%= code_in['desktop/steps/WaveformSteps.cs'].from(/Given/).through(/\}/) %>
+
+!SLIDE
+
+    @@@csharp
+<%= code_in['desktop/steps/WaveformSteps.cs'].from(/When/).through(/\}/) %>
+
+!SLIDE
+
+    @@@csharp
+<%= code_in['desktop/steps/WaveformSteps.cs'].from(/Then/).through(/\}/) %>

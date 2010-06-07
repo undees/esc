@@ -1,0 +1,8 @@
+{
+    "sections": [
+        {"section": "intro"},
+        {"section": "desktop"},
+        {"section": "touchscreen"},
+        {"section": "minimal"}
+    ]
+}

@@ -1,0 +1,16 @@
+body {
+    font-family: Helvetica Neue;
+}
+
+code {
+    font-family: Inconsolata;
+    font-size: 90%;
+}
+
+.code {
+    font-family: Inconsolata;
+}
+
+pre.sh_sourceCode .sh_string { color: red; font-family: Inconsolata; }        /* strings and chars */
+pre.sh_sourceCode .sh_regexp { color: orange; font-family: Inconsolata; }     /* regular expressions */
+pre.sh_sourceCode .sh_specialchar { color: pink; font-family: Inconsolata; }  /* e.g., \n, \t, \\ */

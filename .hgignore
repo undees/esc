@@ -16,3 +16,5 @@ Release/
 \.suo$
 \.vcb$
 \.vco$
+
+^slides/.*\.md$
