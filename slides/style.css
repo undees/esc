@@ -4,13 +4,18 @@ body {
 
 code {
     font-family: Inconsolata;
-    font-size: 90%;
+    font-size: 76%;
 }
 
-.code {
-    font-family: Inconsolata;
-}
-
-pre.sh_sourceCode .sh_string { color: red; font-family: Inconsolata; }        /* strings and chars */
-pre.sh_sourceCode .sh_regexp { color: orange; font-family: Inconsolata; }     /* regular expressions */
-pre.sh_sourceCode .sh_specialchar { color: pink; font-family: Inconsolata; }  /* e.g., \n, \t, \\ */
+pre.sh_sourceCode .sh_preproc   { color: #1f60a0; font-family: Inconsolata; font-weight: normal; }
+pre.sh_sourceCode .sh_number    { color: #0080a0; font-family: Inconsolata; font-weight: normal; }
+pre.sh_sourceCode .sh_string    { color: #bf2f2f; font-family: Inconsolata; font-weight: normal; }
+pre.sh_sourceCode .sh_regexp    { color: #bf2f2f; font-family: Inconsolata; font-weight: normal; }
+pre.sh_sourceCode .sh_symbol    { color: #008080; font-family: Inconsolata; font-weight: normal; }
+pre.sh_sourceCode .sh_keyword   { color: #1f60a0; font-family: Inconsolata; font-weight: normal; }
+pre.sh_sourceCode .sh_comment   { color: #3f603f; font-family: Inconsolata; font-weight: normal; }
+pre.sh_sourceCode .sh_type      { color: #800080; font-family: Inconsolata; font-weight: normal; }
+pre.sh_sourceCode .sh_classname { color: #800080; font-family: Inconsolata; font-weight: normal; }
+pre.sh_sourceCode .sh_normal    { color: #000000; font-family: Inconsolata; font-weight: normal; }
+pre.sh_sourceCode .sh_cbracket  { color: #000000; font-family: Inconsolata; font-weight: normal; }
+pre.sh_sourceCode .sh_function  { color: #800000; font-family: Inconsolata; font-weight: normal; }

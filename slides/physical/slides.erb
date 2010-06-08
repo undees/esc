@@ -1,0 +1,60 @@
+!SLIDE center
+
+# 3\. Physical #
+
+![physical](physical.png)
+
+!SLIDE
+
+# Developer Hooks #
+
+    PUSH:BUTTON SINE
+
+    EDIT:ENABLED? DUTY_CYCLE
+
+!SLIDE
+
+# Existing Tcl code #
+
+!SLIDE
+
+    @@@tcl
+<%= code_in['physical/tcl/waveform.exp'] %>
+
+!SLIDE
+
+# &#8220;Tcl is NOT your friend.&#8221; #
+## David Cohen, on the Tcl-based OpenACS server ##
+
+!SLIDE
+
+# Polyglot testing #
+## Befriending Tcl with Cucumber ##
+
+!SLIDE
+
+    @@@ruby
+<%= code_in['physical/features/step_definitions/waveform_steps.rb'].from(/When/).through(/end/) %>
+
+!SLIDE
+
+    @@@ruby
+<%= code_in['physical/features/step_definitions/waveform_steps.rb'].from(/Then/).through(/end/) %>
+
+!SLIDE
+
+# Just for fun... #
+
+!SLIDE
+
+<%= code_in['physical/features/waveform.feature'] %>
+
+!SLIDE
+
+    @@@tcl
+<%= code_in['physical/tcl/fun/steps.tcl'].from(/When/).through(/^\}/) %>
+
+!SLIDE
+
+    @@@tcl
+<%= code_in['physical/tcl/fun/steps.tcl'].from(/Then/).through(/^\}/) %>

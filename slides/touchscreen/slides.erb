@@ -3,3 +3,44 @@
 # 2\. Touchscreen #
 
 ![touchscreen](touchscreen.png)
+
+!SLIDE
+
+# Drive the GUI<br/>via HTTP #
+
+    http://10.0.0.100/FindWindow?
+      title=Waveform
+
+    http://10.0.0.100/ClickControl?
+      parent=12345&
+      control=1001
+
+    http://10.0.0.100/IsControlEnabled?
+      parent=12345&
+      control=1005
+
+!SLIDE
+
+    @@@ruby
+<%= code_in['touchscreen/features/step_definitions/waveform_steps.rb'].from(/Given/).through(/end/) %>
+
+!SLIDE
+
+    @@@ruby
+<%= code_in['touchscreen/features/step_definitions/waveform_steps.rb'].from(/When/).through(/end/) %>
+
+!SLIDE
+
+    @@@ruby
+<%= code_in['touchscreen/features/step_definitions/waveform_steps.rb'].from(/Then/).through(/end/) %>
+
+!SLIDE
+
+# Embedded<br/>web server #
+### Mongoose ###
+### http://mongoose.googlecode.com ###
+
+!SLIDE
+
+    @@@c
+<%= code_in['touchscreen/server/main.c'].from(/find_window/).through(/\}/) %>

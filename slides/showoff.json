@@ -3,6 +3,7 @@
         {"section": "intro"},
         {"section": "desktop"},
         {"section": "touchscreen"},
+        {"section": "physical"},
         {"section": "minimal"}
     ]
 }
